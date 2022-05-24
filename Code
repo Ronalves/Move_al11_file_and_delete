@@ -1,0 +1,31 @@
+* Início - Ralves - 20/05/2022.
+  CONCATENATE c_cp          "Comando copy
+              vg_fullpath   "Diretorio orginal
+              ' '
+              vg_fullpathc  "Diretorio destino
+              INTO vl_unixcomm SEPARATED BY space IN CHARACTER MODE.
+
+  CALL 'SYSTEM' ID 'COMMAND' FIELD vl_unixcomm
+                ID 'TAB'     FIELD tabl-*sys*.
+  IF sy-subrc = 0.
+    "Remove arquivo
+    CLEAR vl_unixcomm.
+    CONCATENATE c_rm      "comando Remove
+                ' '       "espaço
+                vg_fullpath   "Diretorio orginal
+                INTO vl_unixcomm SEPARATED BY space IN CHARACTER MODE .
+    CALL 'SYSTEM' ID 'COMMAND' FIELD vl_unixcomm
+                  ID 'TAB'     FIELD tabl-*sys*.
+    IF sy-subrc <> 0.
+      vg_erro = 'X'.
+    ENDIF.
+  ELSE.
+    vg_erro = 'X'.
+  ENDIF.
+
+  IF vg_erro IS INITIAL.
+    WRITE:/ 'Foram Gravadas: ', vg_lines, ' linhas no arquivo' .
+  ELSE.
+    WRITE:/ 'Erro ao gravar AL11'.
+  ENDIF.
+* Fim- Ralves - 20/05/2022.
